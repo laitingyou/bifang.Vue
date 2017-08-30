@@ -4,10 +4,10 @@ var gjsduck = new GJSDuck(["--out", "docs"]);
 
 gulp.task("jsdusk", function()
 {
-    gulp.src("./src/index.js")
+    gulp.src("./doc.js")
         .pipe(gjsduck.doc());
 });
 gulp.task("default", function()
 {
-    gulp.watch('./src/**.js',['jsdusk']);
+    gulp.watch("./doc.js",['jsdusk']);
 });

@@ -52,6 +52,14 @@ module.exports={
                         attrs: [':data-src']
                     }
                 }
+            },
+            {
+                test:/\.vue$/,
+                use:['vue-loader']
+            },
+            {
+                test: /\.scss$/,
+                loader: "webpack-sass"
             }
         ]
     }
