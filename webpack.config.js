@@ -10,12 +10,10 @@ module.exports={
     devtool: 'inline-source-map',
     devServer: {
         contentBase: './src',
+        historyApiFallback: true,
         hot: true
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            title: 'Hot'
-        }),
         new webpack.HotModuleReplacementPlugin()
     ],
     module:{
@@ -45,6 +43,15 @@ module.exports={
                 use:[
                     'babel-loader'
                 ]
+            },
+            {
+                test: /\.(html)$/,
+                use: {
+                    loader: 'html-loader',
+                    options: {
+                        attrs: [':data-src']
+                    }
+                }
             }
         ]
     }
