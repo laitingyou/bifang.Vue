@@ -2,10 +2,11 @@
     <div class="hp-menu-h100">
         <menus></menus>
         <div class="placeholder" v-if="show"></div>
-        <div :class="show?'container':'container-hide'">
-            <router-view>
-            </router-view>
-        </div>
+        <!--<div :class="show?'container':'container-hide'">-->
+            <!--<router-view>-->
+            <!--</router-view>-->
+        <!--</div>-->
+        <b-nav></b-nav>
     </div>
 </template>
 <style scoped>
@@ -51,7 +52,7 @@
 </style>
 <script>
     import Menu from './Menu.vue';
-    import Nav from  './Nav.vue';
+    import bNav from  './Nav.vue';
     export default {
         data(){
             return {
@@ -60,7 +61,7 @@
         },
         components: {
             'menus': Menu,
-            'b-nav':Nav
+            'b-nav':bNav
         },
     }
 </script>

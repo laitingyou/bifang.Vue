@@ -13,11 +13,11 @@ export default new Router({
             path:'/',
             component:Comtainer,
             children:[
-                Welcome
+                {
+                    path:'welcome',
+                    component:Welcome
+                }
             ]
         }
     ]
-
-
-
 });
