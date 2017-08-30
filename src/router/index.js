@@ -4,13 +4,17 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Comtainer from '../components/base/Container.vue';
+import Welcome from '../components/Welcome.vue';
 Vue.use(Router);
 export default new Router({
     base: __dirname,
     routes:[
         {
             path:'/',
-            component:Comtainer
+            component:Comtainer,
+            children:[
+                Welcome
+            ]
         }
     ]
 

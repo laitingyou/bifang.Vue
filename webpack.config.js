@@ -62,5 +62,10 @@ module.exports={
                 loader: "webpack-sass"
             }
         ]
+    },
+    resolve: {
+        alias:{
+            publicPath:path.resolve(__dirname,'public')
+        }
     }
 }

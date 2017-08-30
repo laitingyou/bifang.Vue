@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 import Store from './store';
 import View from './view.vue';
 
-
+import 'publicPath/css/normalize.min.css'
 import './static/base.scss'
 
 

@@ -1,7 +1,6 @@
 <template>
     <div class="hp-menu-h100">
         <menus></menus>
-        <b-nav></b-nav>
         <div class="placeholder" v-if="show"></div>
         <div :class="show?'container':'container-hide'">
             <router-view>
