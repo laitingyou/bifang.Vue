@@ -5,38 +5,7 @@
     <div>
         <template>
             <div>
-                <mu-raised-button label="unselect" @click="unselect"/>
-                <mu-table multiSelectable enableSelectAll ref="table">
-                    <mu-thead>
-                        <mu-tr>
-                            <mu-th>ID</mu-th>
-                            <mu-th>Name</mu-th>
-                            <mu-th>Status</mu-th>
-                        </mu-tr>
-                    </mu-thead>
-                    <mu-tbody>
-                        <mu-tr>
-                            <mu-td>1</mu-td>
-                            <mu-td>John Smith</mu-td>
-                            <mu-td>Employed</mu-td>
-                        </mu-tr>
-                        <mu-tr>
-                            <mu-td>2</mu-td>
-                            <mu-td>Randal White</mu-td>
-                            <mu-td>Unemployed</mu-td>
-                        </mu-tr>
-                        <mu-tr>
-                            <mu-td>3</mu-td>
-                            <mu-td>Stephanie Sanders</mu-td>
-                            <mu-td>Employed</mu-td>
-                        </mu-tr>
-                        <mu-tr>
-                            <mu-td>4</mu-td>
-                            <mu-td>Steve Brown</mu-td>
-                            <mu-td>Employed</mu-td>
-                        </mu-tr>
-                    </mu-tbody>
-                </mu-table>
+                <V-input data="{{inputData}}"></V-input>
             </div>
         </template>
     </div>
@@ -46,14 +15,16 @@
 </style>
 <script>
     import Table from './btable/table.vue';
+    import Input from './test/input.vue';
     export default {
         data(){
            return{
-
+                inputData:'123213222'
            }
         },
         components:{
-            'B-Table':Table
+            'V-Table':Table,
+            'V-input':Input
         }
 
     }
