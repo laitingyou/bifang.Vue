@@ -1,11 +1,8 @@
 <template>
-    <!--<div contenteditable="true">-->
-        <!--This text can be edited by the user.-->
-    <!--</div>-->
     <div>
         <template>
             <div>
-                <V-input data="{{inputData}}"></V-input>
+                <V-input ref="input" :data.sync="inputData" v-focus="123"></V-input>
             </div>
         </template>
     </div>
@@ -25,6 +22,24 @@
         components:{
             'V-Table':Table,
             'V-input':Input
+        },
+        mounted(){
+            setTimeout(()=>{
+                this.$emit('data-loaded');
+                console.log(this)
+            },3000)
+        },
+        methods:{
+            some(){
+                console.log(4213)
+            }
+        },
+        directives:{
+           focus:{
+               bind(el,arg) {
+
+               }
+           }
         }
 
     }
