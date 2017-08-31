@@ -18,7 +18,7 @@
                     <V-nav></V-nav>
                 </div>
                 <div class="footer">
-                    Muse-UI ©2017 Created by Muse-UI
+                    Bifang.Vue ©2017 Created by Laitingyou
                 </div>
             </div>
         </template>
