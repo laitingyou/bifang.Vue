@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <V-input :content="content"></V-input>
+    <div contenteditable="true">
+        This text can be edited by the user.
     </div>
 </template>
 <style>
@@ -10,9 +10,7 @@
     export default {
         data(){
            return{
-               content:'<div>' +
-               '<h1>3213213</h1>' +
-               '</div>'
+
            }
         }
     }

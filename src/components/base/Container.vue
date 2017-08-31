@@ -1,67 +1,84 @@
 <template>
-    <div class="hp-menu-h100">
-        <menus></menus>
-        <div class="placeholder" v-if="show"></div>
-        <!--<div :class="show?'container':'container-hide'">-->
-            <!--<router-view>-->
-            <!--</router-view>-->
-        <!--</div>-->
-        <b-nav></b-nav>
+    <div>
+        <template>
+            <div class="layout">
+                <div class="header">
+                    <div class="logo">
+                        BiFang.Vue
+                    </div>
+                    <div class="nav">
+                        <mu-tabs :value="activeTab" @change="handleTabChange" class="tab">
+                            <mu-tab value="tab1" title="Demo"/>
+                            <mu-tab value="tab2" title="Events"/>
+                            <mu-tab value="tab3" title="Props"/>
+                        </mu-tabs>
+                    </div>
+                </div>
+                <div class="content">
+                    <V-nav></V-nav>
+                </div>
+                <div class="footer">
+                    Muse-UI ©2017 Created by Muse-UI
+                </div>
+            </div>
+        </template>
     </div>
 </template>
+
 <style scoped>
-    .container {
-        /*margin-top: 75px;*/
-
-        /*新加样式*/
-        height: -webkit-calc(100% - 75px);
-        height: calc(100% - 75px);
-        height: -moz-calc(100% - 75px);
+    .layout{
+        background-color: rgb(236, 236, 236);
     }
 
-    .container-hide{
-        height: 100%;
+    .header{
+        background-color: #7e57c2;
     }
 
-    /*新加样式*/
-    .placeholder{
-        visibility: hidden;
-        height: 75px;
+    .logo{
+        font-size: 24px;
+        color: white;
+        display: inline-block;
+        padding: 10px 20px;
     }
-    .hp-menu-h100{
+
+    .nav{
+        display: inline-block;
+        width: calc(100% - 180px);
+        margin: 0 auto;
+    }
+
+    .tab{
+        margin: 0 auto;
+        width: 400px;
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    .content{
         overflow: hidden;
     }
-    .container{
-        overflow-y: scroll !important;
-        overflow-x: hidden;
-    }
-    ::-webkit-scrollbar {
-        width: 5px;
-        background-color: #4964a1;
-    }
-    ::-webkit-scrollbar-track{
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        border-radius: 10px;
-        background-color: #F5F5F5 ;
-    }
-    ::-webkit-scrollbar-thumb{
-        border-radius: 10px;
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-        background-color: #4964a1;
+
+
+
+    .footer{
+        padding: 20px 0;
+        text-align: center;
     }
 </style>
 <script>
-    import Menu from './Menu.vue';
-    import bNav from  './Nav.vue';
+    import Nav from  './Nav.vue';
     export default {
-        data(){
+        data () {
             return {
-                show:true,
+                activeTab: 'tab1'
             }
         },
-        components: {
-            'menus': Menu,
-            'b-nav':bNav
+        components:{
+            'V-nav':Nav
         },
+        methods: {
+            handleTabChange (val) {
+                this.activeTab = val
+            }
+        }
     }
 </script>
