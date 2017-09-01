@@ -11,22 +11,21 @@ Vue.use(MuseUI)
 import 'publicPath/css/normalize.min.css';
 //import 'publicPath/css/sakura.css';
 import './static/base.scss'
-// Vue.directive('my-directive', {
-//     insert: function () {
-//         console.log('insert')
-//     },
-//     update: function (newValue, oldValue) {
-//         // 根据获得的新值执行对应的更新
-//         // 对于初始值也会被调用一次
-//     },
-//     unbind: function () {
-//         // 做清理工作
-//         // 比如移除在 bind() 中添加的事件监听器
-//     }
-// })
-
+import mixin from './util/mixins'
+Vue.use(mixin);
+const Wx={
+    methods:{
+        col(){
+            console.log(2132134)
+        }
+    }
+}
 const app = new Vue({
     el: '#app',
     router:routes,
-    render: h=>h(View)
-})
+    render: h=>h(View),
+    mixins:[Wx],
+    provide: {
+        foo: 'bar'
+    }
+});
