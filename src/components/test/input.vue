@@ -19,10 +19,11 @@
             data:''
         },
         watch:{
-
+            inputData(val){
+                this.$emit('update:foo',val)
+            }
         },
         mounted(){
-            this.inputData=this.data;
         },
         method:{
 

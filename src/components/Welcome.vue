@@ -2,7 +2,7 @@
     <div>
         <template>
             <div>
-                <V-input ref="input" :data.sync="inputData" v-focus="123"></V-input>
+                <V-input ref="input" :foo.sync="inputData" v-focus="123"></V-input>
             </div>
         </template>
     </div>
