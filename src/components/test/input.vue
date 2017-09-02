@@ -1,10 +1,6 @@
 <template>
     <div>
-        <select :value="selected" @change="emitChange($event.target.value)">
-                <option :value="123"></option>
-                <option :value="443"></option>
-        </select>
-        {{selected}}
+        <input type="text" @input="change($event.target.value)" v-model="inputData">
     </div>
 
 </template>
@@ -13,6 +9,8 @@
 </style>
 <script>
     export default{
+        name:'input',
+        componentName: 'ElInput',
         inject:['foo'],
         data(){
             return{
@@ -25,19 +23,27 @@
         },
         props:{
             data:'',
-            selected:''
+            selected:'',
+            changes:Function
         },
         watch:{
             inputData(val){
-                this.$emit('update:foo',val);
-                console.log(this.foo);
+                console.log(this)
+               // this.$emit('update:foo',val);
+                this.$root.$emit.apply(this.$root,['update',val])
+              //  console.log(this.foo);
             }
         },
         mounted(){
+            console.log(this);
         },
         methods:{
+
             emitChange(value){
                 this.$emit('change', value);
+            },
+            change(val,a){
+                this.changes.call(this,val);
             }
         }
     }
