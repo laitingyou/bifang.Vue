@@ -30,7 +30,7 @@
             inputData(val){
                 console.log(this)
                // this.$emit('update:foo',val);
-                this.$root.$emit.apply(this.$root,['update',val])
+             //   this.$root.$emit.apply(this.$root,['update',val])
               //  console.log(this.foo);
             }
         },

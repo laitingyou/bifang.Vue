@@ -5,7 +5,7 @@ import Button from './button/index';
 import Input from './input/index';
 import Checkbox from './checkbox/index';
 import Radio from  './radio/index';
-import Table from './table/index';
+import Table from './btable/index';
 
 const components=[
     Button,

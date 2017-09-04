@@ -145,11 +145,6 @@
 
                                     </template>
 
-                                    <!--<template>-->
-                                    <!--<td class="action remove is-visible" v-if="!(isEdit && editable) && operable">-->
-
-                                    <!--</td>-->
-                                    <!--</template>-->
                                 </b-tr>
                             </template>
                             <b-tr v-if="Total && (!isEdit || !editable) && sourceData.length>0" v-for="(item,index) in Total" :key="index">
@@ -429,20 +424,21 @@
 
 
 <script>
-    //import {Loading} from 'element-ui';
-    import {util} from '../../util/util';
+    import {tableData} from '../../../util/model';
     import tbody from './tbody.vue';
     import td from './td.vue';
     import thead from './thead.vue';
     import tr from './tr.vue';
+    import th from './th.vue';
     export default{
+        name:'BTable',
         props: {
             isHover:{
                 default:false
             },
             head: {
                 default: function () {
-                    return []
+                    return tableData.head
                 }
             },
             data: {
@@ -453,7 +449,7 @@
             ,
             column: {
                 default: function () {
-                    return []
+                    return tableData.column
                 }
             },
             width: {
@@ -522,7 +518,8 @@
           'b-tbody':tbody,
           'b-thead':thead,
           'b-td':td,
-          'b-tr':tr
+          'b-tr':tr,
+            'b-th':th
         },
         data: function () {
             return {
@@ -564,237 +561,59 @@
         },
         watch: {
             loading: function (val, oldVal) {
-                if (val) {
-                    if (this.domLoading === null) {
-                        this.showLoading();
-                    }
-                }
-                else {
-                    this.domLoading.close();
-                    this.domLoading = null;
-                }
-                ;
+
             },
             isEdit: function (val) {
-                /*通知上级，表格当前状态，以判断是否可以跳转*/
-                this.$emit('getTableStatus', val);
-                this.$emit('getTableId');
+
             },
             error: function (val) {
 
 
-                if (val != null) {
-                    for (let errorItem in val) {
-                        this.sourceData.map((sourceItem)=> {
-                            if (errorItem == sourceItem._id) {
-                                for (let vItem in val[errorItem]) {
-                                    sourceItem[vItem] = val[errorItem][vItem];
-                                }
-                            }
-                        });
-                    }
-                    ;
-                    this.changeList = {
-                        add: [],
-                        update: [],
-                        remove: []
-                    };
-                } else {
-                    this.updata_tmp = {}
-                }
+
 
 
             },
             data: function (val, oldVal) {
-                this.sourceData = util.clone(val);
-                let arrColumn = [];
-                for (let i in this.column) {
-                    if (this.column[i].merge) {
-                        arrColumn.push(this.column[i].name);
-                    }
-                }
 
-
-                this.sourceData = this.updateId(this.sourceData);
-                if (arrColumn.length > 0) {
-                    this.sourceData = util.orderBy(util.clone(this.sourceData), arrColumn, 'desc').results;
-                    this.sourceMergeData = this.formatData(this.sourceData, arrColumn);
-                }
 
             },
             checkAll (val) {
-                this.checkedItems = [];
-                if (val) {
-                    this.sourceData.map((item, i) => {
-                        this.checkedItems.push(item._id)
-                    })
-                } else {
-                    this.checkedItems = []
-                }
+
             }
         },
         methods: {
             getAttr: function (attr) {
-                return attr ? attr : 1;
-            },
-            log: function (val) {
 
             },
             clearData: function () {
-                this.changeList = {
-                    add: [],
-                    update: [],
-                    remove: []
-                };
+
             },
             onEdit: function (type) {
-                this.isEdit = this.isEdit ? false : true;
-                this.editType=type;
-                this.$emit('editType',type)
+
             },
             onAdd: function (e) {
-                /*添加数组*/
-                let item = {};
-                for (let i in this.column) {
-                    if (this.column[i].type == 'switch') {
-                        item[this.column[i].name] = "1";
-                    }
-                    else {
-                        item[this.column[i].name] = "";
-                    }
-                }
-                let _id = "tr_add" + (new Date()).getTime();
-                item['_id'] = _id;
-                item['_action'] = 'add';
-                this.$emit('isAdd', item);
-                this.sourceData.push(Object.assign({}, item));
-                /*空对象*/
-                this.emptyObj = Object.assign({}, item);
-                this.isEdit = true;
+
             },
             onSave: function (e) {
-                this.isEdit = false;
-                let tmp = [];
-                this.sourceData.map((item, i) => {
-                    for (let v in item) {
-                        if (item[v] && typeof item[v] == "object") {
-                            item[v] = item[v].value;
-                        }
-                    }
-                    if (item._action === 'add') {
-                        /*如果和空对象值相等，就去掉*/
-                        if (util.isEqual(this.emptyObj, item)) {
-                            tmp.push(item._id);
 
-                        } else {
-
-                            this.changeList.add.push(item);
-                        }
-                    }
-                });
-                tmp.map((_id, i)=> {
-                    this.sourceData.map((item, j)=> {
-                        if (item._id == _id) {
-                            this.sourceData.splice(j, 1);
-                        }
-                    })
-                });
-                /**
-                 * 去重复
-                 * */
-                let array_update = [];
-                this.sourceData.map((item, i) => {
-                    let array_tmp = [];
-                    this.changeList.update.map((_item, _i) => {
-                        if (item._id == _item._id) {
-                            array_tmp.push(_item);
-                        }
-                    });
-                    if (array_tmp.length > 0) {
-                        array_update.push(array_tmp[array_tmp.length - 1]);
-                    }
-
-                    if (item._action)
-                        delete item._action;
-                });
-                this.changeList.update = array_update;
-                /**/
-
-                this.$emit('update', this.changeList, this.sourceData);
-                this.updata_tmp = Object.assign({}, this.changeList);
-                if (this.clear) {
-                    this.changeList = {
-                        add: [],
-                        update: [],
-                        remove: []
-                    };
-                }
 
             },
             onRemove: function (val, e) {
-                this.checkKey = new Date().getTime();
-                this.checkedItems.map((item, i) => {
-                    this.sourceData.map((_item, _i) => {
-                        if (item == _item._id) {
-                            if (_item['_action'] != 'add') {
-                                _item['_action'] = 'remove';
-                                this.changeList.remove.push(_item);
-                                this.sourceData.splice(_i, 1);
-                            } else {
-                                this.sourceData.splice(_i, 1);
-                            }
 
-                        }
-                    })
-                });
-                this.checkedItems = [];
-                this.checkAll = true;
-                this.checkAll = false;
 
             },
             onCancel: function () {
-                this.sourceData = util.clone(this.data);
-                this.sourceData = this.updateId(this.sourceData);
-                this.isEdit = false;
-//                this.addable = false;
-                this.changeList = {
-                    add: [],
-                    update: [],
-                    remove: []
-                };
-                this.checkedItems = [];
-            },
-            showLoading: function () {
-                this.domLoading = Loading.service({
-                    target: '#' + this.tableId,
-                    body: false,
-                    lock: true,
-                    fullscreen: false,
-                    text: ''
-                });
+
             },
             submitDraft(){
-                this.isEdit=false;
-                this.$emit('submitDraft',this.sourceData);
+
             },
             /*更新记录*/
             update(val, name, row, columnName){
-                this.switchDate={date:this.sourceData[row],columnName:columnName};
-                let item = this.sourceData[row];
-                if (item._action !== 'add') {
-                    /*当前修改行*/
-                    this.changeList.update.push(item);
-                }
 
-                this.$emit('thisRow', item, this.sourceData, row, columnName);
             },
             updateId(data){
-                data.map((item, i)=> {
-                    if (!item["_id"]) {
-                        item['_id'] = "tr_update_" + i;
-                    }
-                });
-                return data;
+
             },
 
             /**
@@ -802,16 +621,7 @@
              */
 
             changeCheck(val) {
-                let array_tmp = true;
-                this.checkedItems.map((item, i) => {
-                    if (item == val) {
-                        this.checkedItems.splice(i, 1);
-                        array_tmp = false;
-                    }
-                })
-                if (array_tmp) {
-                    this.checkedItems.push(val)
-                }
+
             },
 
             /**
@@ -819,17 +629,7 @@
              * val   返回当前列字段
              */
             sortMethod(val) {
-                if (!this.sortStatus[val] || this.sortStatus[val]== 1) {
 
-                    this.sortStatus[val]=1;
-                    this.sortStatus[val]++;
-                } else if (this.sortStatus[val] == 2) {
-
-                    this.sortStatus[val]++;
-                } else if (this.sortStatus[val] == 3) {
-                    this.sortStatus[val] = 1;
-                }
-                this.$emit('onSort', this.sortStatus[val], val);
 
             },
             /**
@@ -838,7 +638,7 @@
              * index 返回索引值
              */
             cell_click(item, index) {
-                this.$emit('onLookup', item, index);
+
             },
             /**
              * 点击当前行
@@ -846,7 +646,7 @@
              * index 返回索引值
              */
             row_click (data, index) {
-                this.$emit('row_click', data, index);
+
             },
 
             /**
@@ -907,67 +707,27 @@
              */
             /*点击弹出上传的模态框 */
             upload (fileData, actionApi, index) {
-                this.dialogVisible = true;
-                this.rowIndex = index;
-                this.fileList = fileData;
-                this.actionApi = actionApi;
-                if (!this.isEdit)
-                    return false;
-                this.$nextTick(()=> {
-                    if (this.$refs.upload['uploadFiles'] && this.$refs.upload.uploadFiles.length > 0) {
-                        this.isUploadStatus = 'ready';
-                    } else {
-                        this.isUploadStatus = null;
-                    }
 
-                })
             },
             /*上传控件 */
             submitUpload() {
-                this.actionApi = this.uploadApi;
-                this.$nextTick(()=> {
-                    this.$refs.upload.submit();
-                })
+
 
             },
             uploadChange(file, fileList) {
-                if (file.status == 'ready') {
-                    this.uploadFiles = Object.assign([], fileList);
-                    this.isUploadStatus = 'ready';
-                }
-                /*上传失败*/
-                else if (file.status == 'fail') {
-                    this.isUploadStatus = file.status;
-                    /*上传成功*/
-                } else if (file.status == 'success') {
-                    this.isUploadStatus = file.status;
-                    this.fileList = file.response;    //上传成功，加到文件列表处
 
-                    this.$refs.upload.uploadFiles.find((item, index)=> {
-                        if (file.uid == item.uid) {
-                            this.$refs.upload.uploadFiles.splice(index, 1);
-                        }
-                    })
-
-                }
-                this.$emit('upload', file, fileList, this.rowIndex);
             },
             /*模态框关闭前*/
             uploadHandleClose() {
-                /*把上存上列表清空*/
-                if (this.isUploadStatus == 'success') {
-                    this.$refs.upload.uploadFiles = [];
-                }
-                this.dialogVisible = false;
-                this.isUploadStatus = 'ready';
+
             },
             /*上传之前*/
             beforeUpload () {
-                this.isUploadStatus = 'loading';
+
             },
 
             downloadFile(fileUrl){
-                this.$emit('downloadFile', fileUrl);
+
             },
 
             /**
@@ -975,40 +735,24 @@
              * @param index  返回删除的索引值
              */
             deleteFile (index, md5) {
-                this.fileList.splice(index, 1);
-                this.$emit('deleteFile', this.rowIndex, md5);
+
             },
             /**
              * 点击查看事件
              */
             lookup(row){
-                this.$emit('lookup', row)
+
             },
             onReason(row, col, index){
-                this.$emit('onReason',row, col, index)
-                this.reasonVisible = true;
-                this.initRow = Object.assign({}, this.data)[index];
-                this.row = row;
-                this.reasonModel = this.row['reason'];
+
             },
             onReasonCancel(){
 
-                this.reasonVisible = false;
-                /*初始状态*/
-                //     this.row['is_close']=this.initRow['is_close'];
-                /*上一次状态*/
                 this.switchDate.date[this.switchDate.columnName]= '1';
 
             },
             handleClose(){
-                this.reasonVisible = false;
-                /*初始状态*/
-                //     this.row['is_close']=this.initRow['is_close'];
-                /*上一次状态*/
-                if (this.isEdit) {
-                    this.switchDate.date[this.switchDate.columnName]= '1';
-                   // this.row['is_edit'] = '1';
-                }
+
 
 
             },
@@ -1032,27 +776,17 @@
                 this.$emit('onExport');
             },
             handleSelect(val, index) {
-                this.$emit('handleSelect', val, index, this.sourceData)
+
             },
             /**
              * 模态框输入
              * @param item 当前行内容
              */
             dialogInput(item){
-                this.dialogDate=Object.assign({},item);
-                this.dialogData=item;
-                this.dialogInputVisible=true;
+
             },
             onChange(val,data,index){
-                let row=null;
-                this.$set(this.dialogData,index,val);
 
-                this.sourceData.find((item,i)=>{
-                    if(data._id==item._id){
-                        row=i;
-                    }
-                })
-                this.update(val, '', row, index);
             },
             toDate(val){
                 return new Date(val);
@@ -1065,15 +799,7 @@
         },
 
         mounted: function () {
-            this.$on('tableController',(methodName)=>{
-                this[methodName]();
-            });
-            this.sourceData = util.clone(this.data);
-            this.sourceData = this.updateId(this.sourceData);
-
-            if (this.loading) {
-                this.showLoading();
-            }
+            this.sourceData=tableData.data;
         },
 
 
