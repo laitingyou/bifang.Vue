@@ -2,9 +2,8 @@
     <div>
         <template>
             <div>
-                <!--<V-input ref="input"  v-focus="123" :changes="change"></V-input>-->
                 <el-button>12312</el-button>
-                <b-input @change="change" :value="inputData"></b-input>
+                <b-input @change="change" ></b-input>
                 <BCheckbox></BCheckbox>
                 <BRadio :value=false></BRadio>
                 <b-table></b-table>
